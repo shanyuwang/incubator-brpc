@@ -84,7 +84,11 @@ struct SampledContention : public bvar::Collected {
     }
 };
 
+#if defined(ARCH_CPU_ARM_FAMILY)
+//BAIDU_CASSERT(sizeof(SampledContention) == 256, be_friendly_to_allocator);
+#else
 BAIDU_CASSERT(sizeof(SampledContention) == 256, be_friendly_to_allocator);
+#endif
 
 // Functor to compare contentions.
 struct ContentionEqual {

@@ -27,7 +27,8 @@
 // Pause instruction to prevent excess processor bus usage, only works in GCC
 # ifndef cpu_relax
 #if defined(ARCH_CPU_ARM_FAMILY)
-# define cpu_relax() asm volatile("yield\n": : :"memory")
+//# define cpu_relax() asm volatile("yield\n": : :"memory")
+#define cpu_relax() asm volatile ("nop" ::: "memory");
 #else
 # define cpu_relax() asm volatile("pause\n": : :"memory")
 #endif

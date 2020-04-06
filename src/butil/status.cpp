@@ -40,7 +40,7 @@ int Status::set_errorv(int c, const char* fmt, va_list args) {
     if (_state != NULL) {
         state = _state;
     } else {
-        const size_t guess_size = std::max(strlen(fmt) * 2, 32UL);
+        const size_t guess_size = std::max<unsigned long>(strlen(fmt) * 2, 32UL);
         const size_t st_size = status_size(guess_size);
         new_state = reinterpret_cast<State*>(malloc(st_size));
         if (NULL == new_state) {

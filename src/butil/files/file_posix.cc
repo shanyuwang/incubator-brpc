@@ -278,7 +278,7 @@ int64_t File::Seek(Whence whence, int64_t offset) {
   butil::ThreadRestrictions::AssertIOAllowed();
   DCHECK(IsValid());
 
-#if defined(OS_ANDROID)
+#if defined(OS_ANDROID) || defined(ARCH_CPU_ARM_FAMILY)
   COMPILE_ASSERT(sizeof(int64_t) == sizeof(off64_t), off64_t_64_bit);
   return lseek64(file_.get(), static_cast<off64_t>(offset),
                  static_cast<int>(whence));

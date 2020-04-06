@@ -80,7 +80,7 @@ std::string string_printf(const char* format, ...) {
     // is a hueristic that doesn't affect correctness but attempts to be
     // reasonably fast for the most common cases.
     std::string ret;
-    ret.reserve(std::max(32UL, strlen(format) * 2));
+    ret.reserve(std::max<unsigned long>(32UL, strlen(format) * 2));
 
     va_list ap;
     va_start(ap, format);

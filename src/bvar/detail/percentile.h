@@ -378,7 +378,8 @@ friend class AddLatency;
                 }
                 // Each 
                 const size_t b = invl.added_count();
-                const size_t remain = std::min(
+                //const size_t remain = std::min(
+                const size_t remain = std::min<unsigned long>(
                         round_of_expectation(b * SAMPLE_SIZE, total),
                         (size_t)invl.sample_count());
                 get_interval_at(i).merge_with_expectation(invl, remain);

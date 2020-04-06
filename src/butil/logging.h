@@ -1161,6 +1161,19 @@ inline std::ostream& operator<<(std::ostream& out, const std::wstring& wstr) {
                ::butil::subtle::NoBarrier_AtomicIncrement(&BAIDU_CONCAT(logfstn_, __LINE__), 1) <= N)
 
 // Helper macro included by all *_EVERY_SECOND macros.
+#if defined(ARCH_CPU_ARM_FAMILY)
+#define BAIDU_LOG_IF_EVERY_SECOND_IMPL(logifmacro, severity, condition) \
+    static ::butil::subtle::Atomic32 BAIDU_CONCAT(logeverys_, __LINE__) = 0; \
+    const int64_t BAIDU_CONCAT(logeverys_ts_, __LINE__) = ::butil::gettimeofday_us(); \
+    const int64_t BAIDU_CONCAT(logeverys_seen_, __LINE__) = BAIDU_CONCAT(logeverys_, __LINE__); \
+    logifmacro(severity, (condition) && BAIDU_CONCAT(logeverys_ts_, __LINE__) >= \
+               (BAIDU_CONCAT(logeverys_seen_, __LINE__) + 1000000L) &&  \
+               ::butil::subtle::NoBarrier_CompareAndSwap(                \
+                   &BAIDU_CONCAT(logeverys_, __LINE__),                 \
+                   BAIDU_CONCAT(logeverys_seen_, __LINE__),             \
+                   BAIDU_CONCAT(logeverys_ts_, __LINE__))               \
+               == BAIDU_CONCAT(logeverys_seen_, __LINE__))
+#else
 #define BAIDU_LOG_IF_EVERY_SECOND_IMPL(logifmacro, severity, condition) \
     static ::butil::subtle::Atomic64 BAIDU_CONCAT(logeverys_, __LINE__) = 0; \
     const int64_t BAIDU_CONCAT(logeverys_ts_, __LINE__) = ::butil::gettimeofday_us(); \
@@ -1172,6 +1185,7 @@ inline std::ostream& operator<<(std::ostream& out, const std::wstring& wstr) {
                    BAIDU_CONCAT(logeverys_seen_, __LINE__),             \
                    BAIDU_CONCAT(logeverys_ts_, __LINE__))               \
                == BAIDU_CONCAT(logeverys_seen_, __LINE__))
+#endif
 
 // ===============================================================
 

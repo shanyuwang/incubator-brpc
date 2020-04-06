@@ -143,7 +143,8 @@ public:
         const size_t block_id = (size_t)id / ELEMENTS_PER_BLOCK; 
         if (block_id >= _s_tls_blocks->size()) {
             // The 32ul avoid pointless small resizes.
-            _s_tls_blocks->resize(std::max(block_id + 1, 32ul));
+            //_s_tls_blocks->resize(std::max(block_id + 1, 32ul));
+            _s_tls_blocks->resize(std::max<unsigned long>(block_id + 1, 32ul));
         }
         ThreadBlock* tb = (*_s_tls_blocks)[block_id];
         if (tb == NULL) {
